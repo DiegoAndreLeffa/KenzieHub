@@ -1,17 +1,13 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Link, useNavigate } from "react-router-dom/dist";
-import { useState } from "react";
-import { api } from "../../Service/api";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
-
+import { Link } from "react-router-dom/dist";
 import { loginFormSchema } from "./loginSchema";
 import { StyledFormLogin } from "./style";
+import { useContext } from "react";
+import { UserContext } from "../../Contexts/UserContext";
 
 export function LoginForm() {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { loading, userLogin } = useContext(UserContext);
 
   const {
     register,
@@ -21,21 +17,6 @@ export function LoginForm() {
   } = useForm({
     resolver: yupResolver(loginFormSchema),
   });
-
-  async function userLogin(formData) {
-    try {
-      setLoading(true);
-      const response = await api.post("/sessions", formData);
-      window.localStorage.setItem("@TOKEN", response.data.token);
-      window.localStorage.setItem("@USERID", response.data.user.id);
-
-      navigate("/dashboard");
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   function onSubmit(data) {
     userLogin(data);

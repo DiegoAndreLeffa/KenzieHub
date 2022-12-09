@@ -1,17 +1,13 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
-import { useState } from "react";
-import { api } from "../../Service/api";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { RegisterFormSchema } from "./registerSchema";
-import { useNavigate } from "react-router-dom";
 import { StyledFormRegister } from "./style";
+import { useContext } from "react";
+import { UserContext } from "../../Contexts/UserContext";
 
 export function RegisterForm() {
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { loading, userRegister } = useContext(UserContext);
 
   const {
     register,
@@ -21,21 +17,6 @@ export function RegisterForm() {
   } = useForm({
     resolver: yupResolver(RegisterFormSchema),
   });
-
-  async function userRegister(formData) {
-    try {
-      setLoading(true);
-      const response = await api.post("/users", formData);
-      toast.success("Conta cadastrada com sucesso");
-
-      navigate("/");
-      return response;
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   async function onSubmit(data) {
     delete data.passwordConfirmation;

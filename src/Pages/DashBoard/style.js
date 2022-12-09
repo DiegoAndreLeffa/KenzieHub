@@ -48,7 +48,9 @@ export const StyledDashBoard = styled.div`
 
     color: #f8f9fa;
   }
-
+  .sair:hover {
+    background-color: #343b41;
+  }
   .user {
     height: 118px;
     width: 100%;
@@ -90,25 +92,104 @@ export const StyledDashBoard = styled.div`
     width: 100%;
     height: 80vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
-  .divManu div {
+  .divTech {
+    display: flex;
+    align-items: flex-start;
+    width: 60%;
+    margin-top: 25px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .addTech {
+    padding: 0;
+    width: 40px;
+  }
+  .addTech:hover {
+    background-color: #343b41;
+  }
+  .listaTech {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 60%;
-    margin-top: 40px;
+    height: auto;
+    margin-top: 25px;
+
+    padding: 24px 22px;
+    border-radius: 4px;
+    background-color: #212529;
   }
 
-  .divManu div h2 {
+  .ulTech {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .ulTech li {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 49px;
+
+    padding: 0px 15px;
+    background: #121214;
+    border-radius: 4px;
+    gap: 5px;
+
+    cursor: pointer;
+  }
+  .ulTech li:hover {
+    background-color: #343b41;
+  }
+
+  .ulTech li div {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .ulTech li div h3 {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14.21px;
+    line-height: 22px;
+
+    color: #ffffff;
+  }
+  .ulTech li div p {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12.182px;
+    line-height: 22px;
+
+    text-align: right;
+    color: #4d4d4f;
+  }
+
+  .lixeira {
+    height: 50px;
+    width: 27px;
+    margin-left: 10px;
+    color: grey;
+  }
+  .lixeira: hover {
+    color: white;
+  }
+
+  .divTech h2 {
     font-family: "Inter";
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
     line-height: 28px;
-
-    margin-bottom: 23px;
-
     color: #f8f9fa;
   }
 
@@ -139,7 +220,7 @@ export const StyledDashBoard = styled.div`
     }
 
     .divManu div {
-      display: none;
+      width: 90%;
     }
   }
 `;

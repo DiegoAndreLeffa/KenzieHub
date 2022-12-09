@@ -1,44 +1,57 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { UserContext } from "../../Contexts/UserContext";
+import { Navigate } from "react-router-dom";
 import logo from "../../Imgs/LogoKenzieHub.svg";
-import { api } from "../../Service/api";
+
 import { StyledDashBoard } from "./style";
+import { ModalFormAdd } from "../../Components/ModalFormAdd";
+import { ModalFromAtt } from "../../Components/ModalFromAtt";
+import { TechContext } from "../../Contexts/TechContext";
+import { useEffect } from "react";
+
+import { CgTrash } from "react-icons/cg";
 
 export function DashBoard() {
-  const navigate = useNavigate();
+  const { navigate, user, carregando } = useContext(UserContext);
 
-  const [user, setuser] = useState([]);
+  const { removeTech, attLista } = useContext(TechContext);
+
+  const [modalAdd, setModalAdd] = useState(null);
+  const [modalAtt, setModalAtt] = useState(null);
+
+  const [tech, setTech] = useState();
+
+  useEffect(() => {
+    attLista();
+  }, [attLista]);
+
+  if (carregando) {
+    return null;
+  }
 
   function logout() {
     window.localStorage.clear();
     navigate("/");
   }
 
-  useEffect(() => {
-    async function getUserData() {
-      const tokenLocal = window.localStorage.getItem("@TOKEN");
+  function atualizandoTech(tech) {
+    setModalAtt(true);
+    setTech(tech);
+  }
 
-      const headers = {
-        headers: {
-          Authorization: "Bearer " + tokenLocal,
-        },
-      };
-      try {
-        const response = await api.get(`/profile`, headers);
-        setuser(response.data);
-        return response;
-      } catch (error) {}
-    }
-    getUserData();
-  }, []);
+  function deleteTech(id) {
+    removeTech(id);
+  }
 
-  return (
+  return user ? (
     <StyledDashBoard>
       <nav>
         <div>
           <img src={logo} alt="Kenzie HUB" />
 
-          <button onClick={logout}>Sair</button>
+          <button className="sair" onClick={logout}>
+            Sair
+          </button>
         </div>
       </nav>
       <header className="user">
@@ -48,14 +61,40 @@ export function DashBoard() {
           <p>{user.course_module}</p>
         </div>
       </header>
+      {modalAdd && <ModalFormAdd setModalAdd={setModalAdd} />}
+      {modalAtt ? <ModalFromAtt tech={tech} setModalAtt={setModalAtt} /> : null}
       <div className="divManu">
-        <div>
-          <h2>Que pena! Estamos em desenvolvimento :(</h2>
-          <p>
-            Nossa aplicação está em desenvolvimento, em breve teremos novidades
-          </p>
+        <div className="divTech">
+          <h2>Tecnologias</h2>
+          <button
+            className="addTech"
+            type="button"
+            onClick={() => setModalAdd(true)}
+          >
+            +
+          </button>
+        </div>
+        <div className="listaTech">
+          <ul className="ulTech">
+            {user.techs.map((tech) => {
+              return (
+                <li key={tech.id}>
+                  <div onClick={() => atualizandoTech(tech)}>
+                    <h3>{tech.title}</h3>
+                    <p>{tech.status}</p>
+                  </div>
+                  <CgTrash
+                    className="lixeira"
+                    onClick={() => deleteTech(tech.id)}
+                  />
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </StyledDashBoard>
+  ) : (
+    <Navigate to="/" />
   );
 }
